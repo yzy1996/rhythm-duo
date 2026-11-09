@@ -37,12 +37,12 @@
             <span>节律型</span>
             <div class="chips" id="typeA" role="group" aria-label="第一位节律型"></div>
           </div>
+          <label class="field">
+            <span>出生日期（计算传统生物节律时必填）</span>
+            <input id="birthA" type="date" min="1930-01-01" />
+          </label>
           <details class="extra">
-            <summary>传统层（生日、周期）</summary>
-            <label class="field">
-              <span>出生日期</span>
-              <input id="birthA" type="date" min="1930-01-01" />
-            </label>
+            <summary>更多设置（出生时刻、周期）</summary>
             <label class="field">
               <span>出生时刻（可选，用来微调相位）</span>
               <input id="birthTimeA" type="time" />
@@ -79,12 +79,12 @@
             <span>节律型</span>
             <div class="chips" id="typeB" role="group" aria-label="第二位节律型"></div>
           </div>
+          <label class="field">
+            <span>出生日期（计算传统生物节律时必填）</span>
+            <input id="birthB" type="date" min="1930-01-01" />
+          </label>
           <details class="extra">
-            <summary>传统层（生日、周期）</summary>
-            <label class="field">
-              <span>出生日期</span>
-              <input id="birthB" type="date" min="1930-01-01" />
-            </label>
+            <summary>更多设置（出生时刻、周期）</summary>
             <label class="field">
               <span>出生时刻（可选，用来微调相位）</span>
               <input id="birthTimeB" type="time" />
@@ -128,8 +128,9 @@
       <div id="windows" class="windows"></div>
     </section>
 
-    <section id="classicArea" class="classic-area" hidden>
+    <section id="classicArea" class="classic-area">
       <section class="card">
+        <p id="classicEmpty" class="chart-lead" role="status">填写上方出生日期后，即可显示传统生物节律曲线；填写两人的生日可进行对照。</p>
         <div class="chart-header">
           <div>
             <p class="layer-tag warn">娱乐层 · 无可靠证据</p>

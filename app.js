@@ -625,11 +625,19 @@ function renderClassic(state, ra, rb) {
   }
 
   if (!valid.length) {
-    els.classicArea.hidden = true
+    els.classicArea.hidden = false
+    $("classicEmpty").hidden = false
+    els.bioChart.parentElement.hidden = true
+    els.bioLegend.innerHTML = ""
+    els.compatSection.hidden = true
+    els.upcoming.hidden = true
+    els.results.innerHTML = ""
     return
   }
 
   els.classicArea.hidden = false
+  $("classicEmpty").hidden = true
+  els.bioChart.parentElement.hidden = false
   els.bioLegend.innerHTML = ""
   valid.forEach((r) => {
     CLASSIC.forEach((c) => {
