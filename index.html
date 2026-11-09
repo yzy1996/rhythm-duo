@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="双人作息与精力曲线对照，寻找共同清醒时段；所有资料保存在本机。" />
+  <title>双人节律对照</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <p class="eyebrow">作息优先 · 传统层可选</p>
+      <h1>双人节律对照</h1>
+      <p class="header-desc">用起床时间和节律型估算当天精力曲线，找两人重叠的较好时段。生日正弦波只作为娱乐对照。</p>
+    </header>
+
+    <section class="people" aria-label="两人资料">
+      <article class="person-card person-a">
+        <div class="person-accent"></div>
+        <div class="person-body">
+          <label class="field">
+            <span>姓名</span>
+            <input id="nameA" type="text" maxlength="12" placeholder="第一位" autocomplete="name" />
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>起床</span>
+              <input id="wakeA" type="time" />
+            </label>
+            <label class="field">
+              <span>睡眠时长</span>
+              <select id="sleepA"></select>
+            </label>
+          </div>
+          <div class="field">
+            <span>节律型</span>
+            <div class="chips" id="typeA" role="group" aria-label="第一位节律型"></div>
+          </div>
+          <details class="extra">
+            <summary>传统层（生日、周期）</summary>
+            <label class="field">
+              <span>出生日期</span>
+              <input id="birthA" type="date" min="1930-01-01" />
+            </label>
+            <label class="field">
+              <span>出生时刻（可选，用来微调相位）</span>
+              <input id="birthTimeA" type="time" />
+            </label>
+            <div class="field-row periods">
+              <label class="field"><span>体力天</span><input id="pPhysA" type="number" min="15" max="60" step="1" /></label>
+              <label class="field"><span>情绪天</span><input id="pEmoA" type="number" min="15" max="60" step="1" /></label>
+              <label class="field"><span>智力天</span><input id="pIntA" type="number" min="15" max="60" step="1" /></label>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <div class="vs" aria-hidden="true">对照</div>
+
+      <article class="person-card person-b">
+        <div class="person-accent"></div>
+        <div class="person-body">
+          <label class="field">
+            <span>姓名</span>
+            <input id="nameB" type="text" maxlength="12" placeholder="第二位" autocomplete="off" />
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>起床</span>
+              <input id="wakeB" type="time" />
+            </label>
+            <label class="field">
+              <span>睡眠时长</span>
+              <select id="sleepB"></select>
+            </label>
+          </div>
+          <div class="field">
+            <span>节律型</span>
+            <div class="chips" id="typeB" role="group" aria-label="第二位节律型"></div>
+          </div>
+          <details class="extra">
+            <summary>传统层（生日、周期）</summary>
+            <label class="field">
+              <span>出生日期</span>
+              <input id="birthB" type="date" min="1930-01-01" />
+            </label>
+            <label class="field">
+              <span>出生时刻（可选，用来微调相位）</span>
+              <input id="birthTimeB" type="time" />
+            </label>
+            <div class="field-row periods">
+              <label class="field"><span>体力天</span><input id="pPhysB" type="number" min="15" max="60" step="1" /></label>
+              <label class="field"><span>情绪天</span><input id="pEmoB" type="number" min="15" max="60" step="1" /></label>
+              <label class="field"><span>智力天</span><input id="pIntB" type="number" min="15" max="60" step="1" /></label>
+            </div>
+          </details>
+        </div>
+      </article>
+    </section>
+
+    <section class="date-bar">
+      <button type="button" id="prevDay" class="nav-btn">前一天</button>
+      <label class="date-center">
+        <span>查询日期</span>
+        <input id="targetDate" type="date" min="1930-01-01" />
+      </label>
+      <button type="button" id="todayBtn" class="nav-btn ghost">今天</button>
+      <button type="button" id="nextDay" class="nav-btn">后一天</button>
+    </section>
+
+    <p id="dateHint" class="date-hint" hidden></p>
+
+    <section class="card">
+      <div class="chart-header">
+        <div>
+          <p class="layer-tag">主层 · 作息估算</p>
+          <h2>当日精力</h2>
+        </div>
+        <div id="energyLegend" class="legend"></div>
+      </div>
+      <p class="chart-lead">简化的昼夜节律 + 醒后疲劳。用来对照「什么时候两人都比较醒」，不是监测数据。</p>
+      <div class="chart-wrap">
+        <canvas role="img" aria-label="两人全天估算精力曲线，具体共同清醒时段见图表下方" id="energyChart" width="900" height="280"></canvas>
+        <div id="energyTip" class="tooltip" hidden></div>
+      </div>
+      <div id="nowRow" class="now-row" hidden></div>
+      <div id="windows" class="windows"></div>
+    </section>
+
+    <section id="classicArea" class="classic-area" hidden>
+      <section class="card">
+        <div class="chart-header">
+          <div>
+            <p class="layer-tag warn">娱乐层 · 无可靠证据</p>
+            <h2>传统生物节律</h2>
+          </div>
+          <div id="bioLegend" class="legend"></div>
+        </div>
+        <p class="chart-lead">从生日起算的 23 / 28 / 33 天正弦波，周期可在上方改。只适合看图玩，不要用来安排健康或安全事项。</p>
+        <div class="chart-wrap">
+          <canvas role="img" aria-label="传统生日节律曲线，具体数值见下方结果卡片" id="bioChart" width="900" height="300"></canvas>
+          <div id="bioTip" class="tooltip" hidden></div>
+        </div>
+      </section>
+
+      <section id="compatSection" class="card" hidden>
+        <div class="compat-head">
+          <h2>传统层当日相位差</h2>
+          <p id="compatOverall" class="compat-overall"></p>
+        </div>
+        <div id="compatBars" class="compat-bars"></div>
+      </section>
+
+      <section id="upcoming" class="card" hidden></section>
+      <section id="results" class="results"></section>
+    </section>
+
+    <footer class="footer">
+      <p>精力曲线按你填的起床、睡眠和早/中/晚型估算，会随作息变，不跟生日走。</p>
+      <p>传统三线是 20 世纪流行算法，科学上站不住。资料只存在这台浏览器里。</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
